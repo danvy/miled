@@ -1,36 +1,35 @@
-# KloutSharp
-The Klout API for C# 
+# MiLED
+Control your MiLight LimitlessLED EasyBulb lights with C#
 
 ##Introduction
-Like it or hate it, there's not a lot of tool to measure your impact on social networks. Klout is one of those, check it on http://klout.com.
-The Klout APIs are pretty simple be a C# implementation will ease your work. I created a portable library so it should be usable for .NET 4.5, Window, Windows Phone, iOS and Android.
-It relies on Json.NET https://www.nuget.org/packages/Newtonsoft.Json and Microsoft HTTP Client Libraries https://www.nuget.org/packages/Microsoft.Net.Http
+I a big Internet of Things fan so I started to install some connected lights and bulbs in my house. I wanted more. I wanted to control those lights myself and give that power to the community.
+Then came the Microsoft France TechDays 2014. During the keynote, I made the demonstration that it is very easy to embrace the IoT wave using Windows and Windows Phone. The MiLight is the extension of this demo. Most possible scenarii are implemented.
 
 ##How to use it?
-First, get a Klout API key http://developer.klout.com/apps/mykeys
-Then, add the KloutSharp NuGet package to your project https://www.nuget.org/packages/danvy.kloutsharp.lib/  
-The entry point is the Klout object so create a Klout object
+Add a reference to the MiLight.SharedLib shared project, and start to play.
+Here are some examples :
+First connect to the bridge
 ```
-var k = new Klout(key);
+var bridge = new LEDBridge("10.10.100.254", "8899");
 ```
-Then you might need to get the Klout identifier of your user. You can use any Klout.Identity*Async method depending on the information your currently have (Twitter Id, Google+ Id, etc.).
+Then switch on all the connected lights
 ```
-var identity = await k.IdentityAsync("danvy");
-Console.WriteLine(string.Format("Your Klout Id is {0}", identity.Id));
+await bridge.RGBWOnAsync(LEDGroups.All);
 ```
-Once you have the Klout Id, you can keep it forever.
-Now you can call the other APIs such as UserAsync to get user informations
+Change some colors
 ```
-var user = await k.UserAsync(kloutId);
-Console.WriteLine(string.Format("Klout user nick={0} score={1}", user.Nick, user.Score.Score));
+await bridge.RGBWColorAsync(LEDColor.Violet);
 ```
-A sample app with full source code is provided.
+Sample apps with full source code are provided.
+It's now your turn to play.
+Happy light show.
 
 ##What's new?
-1.0 Initial release. Supports all Klout API available on http://api.klout.com/v2/ on 2015-02-01
+1.0 Initial release.
 
 ##Q&A
 #### Q: What are the validated platforms?
-Console app on Windows 8.1 by @danvy on 2015-02-01
+Console app on Windows 8.1 by @danvy on 2015-02-07
+Windows Universal app on Windows 8.1 by @danvy on 2015-02-07
 
 If you have any problem with the scripts, use GitHub or contact me on Twitter http://twitter.com/danvy
