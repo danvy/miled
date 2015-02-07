@@ -68,7 +68,7 @@ namespace MiLED
             }
             await _client.SendDataAsync(buffer, buffer.Length);
         }
-        public async Task StrobeMode(CancellationToken? ct = null)
+        public async Task StrobeModeAsync(CancellationToken? ct = null)
         {
             while ((ct == null) || ((ct != null) && (ct.Value.CanBeCanceled) && (ct.Value.IsCancellationRequested)))
             {
@@ -240,7 +240,7 @@ namespace MiLED
         {
             await SendCommandAsync(LEDCommands.RGBSpeedDown);
         }
-        public async Task RGBWOff(LEDGroups group)
+        public async Task RGBWOffASync(LEDGroups group)
         {
             byte[] cmd;
             switch (group)
@@ -263,7 +263,7 @@ namespace MiLED
             }
             await SendCommandAsync(cmd);
         }
-        public async Task RGBWOn(LEDGroups group)
+        public async Task RGBWOnAsync(LEDGroups group)
         {
             byte[] cmd;
             switch (group)
@@ -286,15 +286,15 @@ namespace MiLED
             }
             await SendCommandAsync(cmd);
         }
-        public async Task RGBWDiscoMode()
+        public async Task RGBWDiscoModeAsync()
         {
             await SendCommandAsync(LEDCommands.RGBWDiscoMode);
         }
-        public async Task RGBWDiscoSpeedSlower()
+        public async Task RGBWDiscoSpeedSlowerAsync()
         {
             await SendCommandAsync(LEDCommands.RGBWDiscoSpeedSlower);
         }
-        public async Task RGBWDiscoSpeedFaster()
+        public async Task RGBWDiscoSpeedFasterAsync()
         {
             await SendCommandAsync(LEDCommands.RGBWDiscoSpeedFaster);
         }
@@ -319,7 +319,7 @@ namespace MiLED
                     cmd = LEDCommands.SetColorToWhite;
                     break;
             }
-            await RGBWOn(group);
+            await RGBWOnAsync(group);
             await DelayAsync();
             await SendCommandAsync(cmd);
         }
@@ -450,16 +450,16 @@ namespace MiLED
                 if (await HandshakeAsync(client))
                 {
                     await client.SendDataAsync(string.Format("AT+WSSSID={0}\r\n", ssid));
-                    if (await ReceiveOk(client))
+                    if (await ReceiveOkAsync(client))
                     {
                         await client.SendDataAsync(string.Format("AT+WSKEY={0},{1},{2}\r\n", "WPA2PSK", "AES", password));
-                        if (await ReceiveOk(client))
+                        if (await ReceiveOkAsync(client))
                         {
                             await client.SendDataAsync(string.Format("AT+WMODE=STA\r\n", ssid));
-                            if (await ReceiveOk(client))
+                            if (await ReceiveOkAsync(client))
                             {
                                 await client.SendDataAsync(string.Format("AT+Z\r\n", ssid));
-                                if (await ReceiveOk(client))
+                                if (await ReceiveOkAsync(client))
                                 {
                                     return true;
                                 }
@@ -498,7 +498,7 @@ namespace MiLED
                 return false;
             }
         }
-        private static async Task<bool> ReceiveOk(LEDAdminClient client)
+        private static async Task<bool> ReceiveOkAsync(LEDAdminClient client)
         {
             var s = await client.ReceiveDataAsync();
             return s.Contains("+ok");

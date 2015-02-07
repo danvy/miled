@@ -23,26 +23,26 @@ namespace MiLED
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private LEDBridge _Bridge = null;
+        private LEDBridge _bridge = null;
         public MainPage()
         {
             this.InitializeComponent();
-            _Bridge = new LEDBridge("10.10.100.254", "8899");
+            _bridge = new LEDBridge("10.10.100.254", "8899");
         }
         private async void SwitchButton_Click(object sender, RoutedEventArgs e)
         {
             if (SwitchButton.IsChecked == true)
             {
-                await _Bridge.SendCommandAsync(LEDCommands.RGBWOn);
+                await _bridge.RGBWOnAsync(LEDGroups.All);
                 for (byte c = 0x60; c < 0xB0; c++)
                 {
                     await Task.Delay(TimeSpan.FromMilliseconds(200));
-                    await _Bridge.RGBWColorAsync(c);
+                    await _bridge.RGBWColorAsync(c);
                 }
             }
             else
             {
-                await _Bridge.SendCommandAsync(LEDCommands.RGBWOff);
+                await _bridge.RGBWOffASync(LEDGroups.All);
             }
         }
     }
